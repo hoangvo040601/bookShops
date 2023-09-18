@@ -13,10 +13,9 @@ import { useDispatch, useSelector } from "react-redux"
 export default function Home() {
   const dispatch = useDispatch();
   const pathname = usePathname();
-  const isAuthenticated = useSelector(state => state.account.isAuthenticated)
+  const isLoading = useSelector(state => state.account.isLoading)
   const getAccount = async () => {
     if (pathname === '/login'
-    || pathname === '/'
     || pathname === '/register'
     ) return;
     const res = await callFetchAccount()
@@ -30,10 +29,9 @@ export default function Home() {
   return (
     <>
       <Header />
-      {isAuthenticated === true
+      {isLoading === false
         || pathname === '/login'
-        || pathname === '/register'
-        || pathname === '/' ?
+        || pathname === '/register' ?
         <>
           HomePage
         </> : <Loading />}

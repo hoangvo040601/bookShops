@@ -16,9 +16,9 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={inter.className}>
         <ReduxProvide>
-            <RootStyleRegistry>
+          <RootStyleRegistry>
               {children}
-            </RootStyleRegistry>
+          </RootStyleRegistry>
         </ReduxProvide>
       </body>
     </html>
