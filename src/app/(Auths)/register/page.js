@@ -4,7 +4,7 @@ import { Button, Divider, Form, Input, notification, message} from 'antd';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation'
-import '../../globals.css'
+import '../../../styles/globals.scss'
 import './register.scss';
 
 

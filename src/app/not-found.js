@@ -1,5 +1,5 @@
 import Link from "next/link";
-import './globals.css'
+import '../styles/globals.scss'
 const NotFound = ()=>{
     return (
         <div className="not_found">
