@@ -10,7 +10,7 @@ import {
     TeamOutlined,
     UserOutlined,
 } from '@ant-design/icons';
-import { Dropdown, Layout, Menu, message, Space} from 'antd';
+import { Avatar, Dropdown, Layout, Menu, message, Space } from 'antd';
 import Footer from '../Footer/Footer';
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
@@ -84,6 +84,13 @@ const LayoutAdmin = ({ children }) => {
         },
 
     ];
+    if (user?.role === 'ADMIN') {
+        itemsDropdown.unshift({
+            label: <Link href='/'>Trang chủ</Link>,
+            key: 'home',
+        })
+    }
+    const urlAvatar = `${process.env.NEXT_PUBLIC_BACKEND_URL}/images/avatar/${user?.avatar}`;
     return (
         <Layout
             style={{
@@ -118,14 +125,15 @@ const LayoutAdmin = ({ children }) => {
                     <Dropdown menu={{ items: itemsDropdown }} trigger={['click']}>
                         <a onClick={(e) => e.preventDefault()}>
                             <Space>
-                                Welcome {user?.fullName}
+                                <Avatar src ={urlAvatar}/>
+                                {user?.fullName}
                                 <DownOutlined />
                             </Space>
                         </a>
                     </Dropdown>
                 </div>
                 <Content>
-                        {children}
+                    {children}
                 </Content>
                 <Footer />
             </Layout>

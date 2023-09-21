@@ -4,6 +4,8 @@ import { Table, Row, Col, Button } from 'antd';
 import InputSearch from './search';
 import { callFetchListUser } from '@/services/api';
 import UserViewDetail from './dataViewDetail';
+import { ExportOutlined, ImportOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons';
+import ModalCreateUser from './modalCreateUser';
 
 // https://stackblitz.com/run?file=demo.tsx
 const TableUser = () => {
@@ -16,6 +18,7 @@ const TableUser = () => {
     const [sortQuery, setSortQuery] = useState('')
     const [dataViewDetail, setDataViewDetail] = useState(false)
     const [openViewDetail, setOpenViewDetail] = useState(false)
+    const [showModal, setShowModal] = useState(false)
 
 
     useEffect(() => {
@@ -68,6 +71,11 @@ const TableUser = () => {
             sorter: true
         },
         {
+            title: 'Ngày cập nhật',
+            dataIndex: 'createdAt',
+            sorter: true
+        },
+        {
             title: 'Action',
             render: (text, record, index) => {
                 return (
@@ -89,14 +97,46 @@ const TableUser = () => {
             setCurrent(1)
         }
         if (sorter && sorter.field) {
-            const q = sorter.order === 'acsend' ? `sort =${sorter.field}` : `sort = -${sorter.field}`
+            const q = sorter.order === 'ascend' ? `sort= ${sorter.field}` : `sort= -${sorter.field}`
             setSortQuery(q);
         }
-        // console.log('params', pagination, filters, sorter, extra);
     };
 
     const handleSearch = (query) => {
         setFilter(query)
+    }
+
+    const renderHeader = () => {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span>Table list user</span>
+                <span style={{ display: 'flex', gap: 15 }}>
+                    <Button
+                        icon={<ExportOutlined />}
+                        type='primary'
+                    >Export</Button>
+                    <Button
+                        icon={<ImportOutlined />}
+                        type="primary"
+                    >Import</Button>
+                    <Button
+                        icon={<PlusOutlined />}
+                        type="primary"
+                        onClick={()=> setShowModal(true)}
+                    >Thêm mới</Button>
+                    <Button
+                        type="ghost"
+                        onClick={() => {
+                            setFilter('');
+                            setSortQuery('')
+                        }}
+                    >
+                        <ReloadOutlined />
+
+                    </Button>
+                </span>
+            </div >
+        )
     }
 
     return (
@@ -109,7 +149,7 @@ const TableUser = () => {
                 </Col>
                 <Col span={24}>
                     <Table
-                        // title={renderHeader}
+                        title={renderHeader}
                         loading={isLoading}
                         className='def'
                         columns={columns}
@@ -121,17 +161,25 @@ const TableUser = () => {
                                 pageSize: pageSize,
                                 showSizeChanger: true,
                                 total: total,
+                                showTotal: (total, range) => {
+                                    return (<div>{range[0]} - {range[1]} trên {total} rows</div>)
+                                }
                             }
                         }
                     />
                 </Col>
             </Row>
-                <UserViewDetail
-                    openViewDetail={openViewDetail}
-                    setOpenViewDetail={setOpenViewDetail}
-                    dataViewDetail={dataViewDetail}
-                    setDataViewDetail={setDataViewDetail}
-                />
+            <UserViewDetail
+                openViewDetail={openViewDetail}
+                setOpenViewDetail={setOpenViewDetail}
+                dataViewDetail={dataViewDetail}
+                setDataViewDetail={setDataViewDetail}
+            />
+            <ModalCreateUser
+                showModal={showModal}
+                setShowModal = {setShowModal}
+                fetchUser = {fetchUser}
+            />
         </>
     )
 }
