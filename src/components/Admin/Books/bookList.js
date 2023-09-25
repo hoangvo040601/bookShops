@@ -1,40 +1,37 @@
 'use client'
 import React, { useEffect, useState } from 'react';
 import { Table, Row, Col, Button, notification, Popconfirm, message } from 'antd';
-import InputSearch from './search';
-import { callDeleteUser, callFetchListUser } from '@/services/api';
-import UserViewDetail from './dataViewDetail';
+import { callBookList, callDeleteUser } from '@/services/api';
 import { DeleteOutlined, EditOutlined, ExportOutlined, ImportOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons';
-import ModalCreateUser from './modalCreateUser';
-import ModalImportUser from './modalUploadFile';
-import * as XLSX from 'xlsx/xlsx.mjs';
-import ModalUpdateUser from './modalUpdateUser';
+import BookSearch from './bookSearch';
+import BookViewDetail from './bookViewDetail';
 
 
 // https://stackblitz.com/run?file=demo.tsx
-const TableUser = () => {
-    const [listUser, setListUser] = useState([]);
+const BookList = () => {
+    const [listBook, setlistBook] = useState([]);
+
     const [current, setCurrent] = useState(1)
-    const [pageSize, setPageSize] = useState(2)
+    const [pageSize, setPageSize] = useState(5)
     const [total, setTotal] = useState()
     const [isLoading, setIsLoading] = useState(false)
     const [filter, setFilter] = useState('')
-    const [sortQuery, setSortQuery] = useState('')
+    const [sortQuery, setSortQuery] = useState("sort =-updatedAt")
     const [dataViewDetail, setDataViewDetail] = useState(false)
     const [openViewDetail, setOpenViewDetail] = useState(false)
-    const [showModalCreate, setShowModalCreate] = useState(false)
-    const [showModalImport, setShowModalImport] = useState(false)
-    const [showModalUpdate, setShowModalUpdate] = useState(false)
-    const [dataUpdate, setDataUpdate] = useState(false)
+    // const [showModalCreate, setShowModalCreate] = useState(false)
+    // const [showModalImport, setShowModalImport] = useState(false)
+    // const [showModalUpdate, setShowModalUpdate] = useState(false)
+    // const [dataUpdate, setDataUpdate] = useState(false)
 
 
 
 
     useEffect(() => {
-        fetchUser();
+        fetchBook();
     }, [current, pageSize, filter, sortQuery])
 
-    const fetchUser = async () => {
+    const fetchBook = async () => {
         setIsLoading(true);
         let query = `current=${current}&pageSize=${pageSize}`;
 
@@ -44,27 +41,28 @@ const TableUser = () => {
         if (sortQuery) {
             query += `&${sortQuery}`
         }
-        const res = await callFetchListUser(query)
+        const res = await callBookList(query)
+        console.log("check : ", res)
         if (res && res.data) {
-            setListUser(res.data.result)
+            setlistBook(res.data.result)
             setTotal(res.data.meta.total)
         }
         setIsLoading(false)
     }
 
-    const handleDeleteUser = async (userId) => {
-        const res = await callDeleteUser(userId)
-        if(res && res.data){
-            message.success("Xoá user thành công!")
-            fetchUser()
-        }else{
-            notification.error({
-                message: "có lỗi xảy ra",
-                description: res.message
-            })
-        }
+    // const handleDeleteUser = async (userId) => {
+    //     const res = await callDeleteUser(userId)
+    //     if(res && res.data){
+    //         message.success("Xoá user thành công!")
+    //         fetchUser()
+    //     }else{
+    //         notification.error({
+    //             message: "có lỗi xảy ra",
+    //             description: res.message
+    //         })
+    //     }
 
-    }
+    // }
     const columns = [
         {
             title: 'Id',
@@ -79,18 +77,23 @@ const TableUser = () => {
             }
         },
         {
-            title: 'Tên Hiển Thị',
-            dataIndex: 'fullName',
+            title: 'Tên sách',
+            dataIndex: 'mainText',
             sorter: true,
         },
         {
-            title: 'Email',
-            dataIndex: 'email',
+            title: 'Thể loại',
+            dataIndex: 'category',
             sorter: true
         },
         {
-            title: 'Điện Thoại',
-            dataIndex: 'phone',
+            title: 'Tác giả',
+            dataIndex: 'author',
+            sorter: true
+        },
+        {
+            title: 'Giá',
+            dataIndex: 'price',
             sorter: true
         },
         {
@@ -108,7 +111,7 @@ const TableUser = () => {
                             placement="leftTop"
                             title={"Xác nhận xoá User"}
                             description="bạn có chắc chắn muốn xoá user này!"
-                            onConfirm={() => handleDeleteUser(record._id)}
+                            // onConfirm={() => handleDeleteUser(record._id)}
                             okText="Xác nhận"
                             cancelText="Huỷ"
                             trigger="click"
@@ -141,10 +144,11 @@ const TableUser = () => {
     const handleSearch = (query) => {
         setFilter(query)
     }
-    const handleExportUser = () => {
-        if (listUser.length > 0) {
 
-            const worksheet = XLSX.utils.json_to_sheet(listUser);
+    const handleExportUser = () => {
+        if (listBook.length > 0) {
+
+            const worksheet = XLSX.utils.json_to_sheet(listBook);
             const workbook = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
             XLSX.writeFile(workbook, "ExportDataUser.xlsx");
@@ -154,18 +158,18 @@ const TableUser = () => {
     const renderHeader = () => {
         return (
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span>Table list user</span>
+                <span>Table list book</span>
                 <span style={{ display: 'flex', gap: 15 }}>
                     <Button
                         icon={<ExportOutlined />}
                         type='primary'
                         onClick={() => handleExportUser()}
                     >Export</Button>
-                    <Button
+                    {/* <Button
                         icon={<ImportOutlined />}
                         type="primary"
                         onClick={() => setShowModalImport(true)}
-                    >Import</Button>
+                    >Import</Button> */}
                     <Button
                         icon={<PlusOutlined />}
                         type="primary"
@@ -190,7 +194,7 @@ const TableUser = () => {
         <>
             <Row gutter={[20, 20]}>
                 <Col span={24}>
-                    <InputSearch
+                    <BookSearch
                         handleSearch={handleSearch}
                         setFilter={setFilter} />
                 </Col>
@@ -200,7 +204,7 @@ const TableUser = () => {
                         loading={isLoading}
                         className='def'
                         columns={columns}
-                        dataSource={listUser}
+                        dataSource={listBook}
                         onChange={onChange}
                         pagination={
                             {
@@ -216,13 +220,13 @@ const TableUser = () => {
                     />
                 </Col>
             </Row>
-            <UserViewDetail
+            <BookViewDetail
                 openViewDetail={openViewDetail}
                 setOpenViewDetail={setOpenViewDetail}
                 dataViewDetail={dataViewDetail}
                 setDataViewDetail={setDataViewDetail}
             />
-            <ModalCreateUser
+            {/* <ModalCreateUser
                 showModalCreate={showModalCreate}
                 setShowModalCreate={setShowModalCreate}
                 fetchUser={fetchUser}
@@ -237,10 +241,10 @@ const TableUser = () => {
                 fetchUser={fetchUser}
                 dataUpdate={dataUpdate}
                 setDataUpdate={setDataUpdate}
-            />
+            /> */}
         </>
     )
 }
 
 
-export default TableUser;
+export default BookList;

@@ -1,51 +1,68 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Divider, Form, Input, message, Modal, notification } from 'antd';
-// import { useForm } from 'antd/es/form/Form';
-import { callCreateAUser } from '@/services/api';
-const ModalCreateUser = (props) => {
-    const { showModalCreate, setShowModalCreate } = props;
+import { callUpdateUser } from '@/services/api';
+const ModalUpdateUser = (props) => {
+    const { showModalUpdate, setShowModalUpdate, dataUpdate, setDataUpdate } = props;
     const [isSubmit, setIsSubmit] = useState(false);
 
     const [form] = Form.useForm();
 
-    const onFinish = async(values)=>{
-        const {fullName, email, password, phone} = values;
-        console.log(values)
+    const onFinish = async (values) => {
+        const { _id, fullName, phone } = values;
         setIsSubmit(true);
-        const res = await callCreateAUser(fullName,email,password,phone);
-        if(res && res.data){
-            message.success("Tạo User thành công!");
+        const res = await callUpdateUser(_id, fullName, phone);
+        if (res && res.data) {
+            message.success("Update thành công");
             form.resetFields();//xoá data trong form
-            setShowModal(false);
+            setShowModalUpdate(false);
             await props.fetchUser();
-        }else{
+        } else {
             notification.error({
-                message : 'Đã có lỗi xảy ra!',
+                message: 'Đã có lỗi xảy ra!',
                 description: res.message
             })
         }
         setIsSubmit(false);
 
     }
+    useEffect(()=>{
+        form.setFieldsValue(dataUpdate)
+    },[dataUpdate])
     return (
         <>
             <Modal
-                title="Thêm người dùng mới"
-                open={showModalCreate}
-                onCancel={()=> setShowModalCreate(false)}
-                onOk = {()=>{form.submit()}}
-                okText = {"Tạo mới"}
-                cancelText = {"Huỷ"}
-                confirmLoading ={isSubmit}
+                title="Chỉnh sửa người dùng"
+                open={showModalUpdate}
+                onCancel={() => {
+                    setShowModalUpdate(false)
+                    setDataUpdate(null)
+                }}
+                onOk={() => { form.submit() }}
+                okText={"Update"}
+                cancelText={"Huỷ"}
+                confirmLoading={isSubmit}
+                maskClosable={false}
+                okButtonProps={{
+                    disabled: true,
+                }}
             >
-                <Divider/>
+                <Divider />
                 <Form
                     form={form}
                     name="basic"
                     onFinish={onFinish}
                     autoComplete="off"
-                    style = {{maxWidth : 600}}
+                    style={{ maxWidth: 600 }}
                 >
+                    <Form.Item
+                        hidden
+                        labelCol={{ span: 24 }} //whole column
+                        label="Id"
+                        name="_id"
+                        rules={[{ required: true, message: 'Vui lòng nhập Id!' }]}
+                    >
+                        <Input />
+                    </Form.Item>
                     <Form.Item
                         labelCol={{ span: 24 }} //whole column
                         label="Họ tên"
@@ -62,16 +79,7 @@ const ModalCreateUser = (props) => {
                         name="email"
                         rules={[{ required: true, message: 'Email không được để trống!' }]}
                     >
-                        <Input />
-                    </Form.Item>
-
-                    <Form.Item
-                        labelCol={{ span: 24 }} //whole column
-                        label="Mật khẩu"
-                        name="password"
-                        rules={[{ required: true, message: 'Mật khẩu không được để trống!' }]}
-                    >
-                        <Input.Password />
+                        <Input disabled/>
                     </Form.Item>
                     <Form.Item
                         labelCol={{ span: 24 }} //whole column
@@ -86,4 +94,4 @@ const ModalCreateUser = (props) => {
         </>
     );
 };
-export default ModalCreateUser;
+export default ModalUpdateUser;

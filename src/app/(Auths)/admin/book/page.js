@@ -1,6 +1,7 @@
 'use client'
 
 import LayoutAdmin from "@/components/Admin";
+import BookList from "@/components/Admin/Books/bookList";
 import useAccount from "@/hooks/useAccount";
 import RoleBaseRoute from "../../role";
 
@@ -9,7 +10,7 @@ const ManageBook = () => {
     return (
         <RoleBaseRoute>
             <LayoutAdmin>
-                Book pages
+                <BookList/>
             </LayoutAdmin>
         </RoleBaseRoute>
     )

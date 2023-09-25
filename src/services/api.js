@@ -22,3 +22,18 @@ export const callFetchListUser = (query)=>{
 export const callCreateAUser = (fullName,email,password,phone)=>{
     return axios.post('/api/v1/user',{fullName,email,password,phone} )
 }
+
+export const callCreateListUser = (data)=>{
+    return axios.post('/api/v1/user/bulk-create', data)
+}
+
+export const callUpdateUser =(_id, fullName, phone)=>{
+    return axios.put('/api/v1/user',{_id, fullName, phone})
+}
+export const callDeleteUser =(_id)=>{
+    return axios.delete(`/api/v1/user/${_id}`)
+}
+
+export const callBookList =(query)=>{
+    return axios.get(`/api/v1/book?${query}`)
+}
