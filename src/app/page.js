@@ -2,6 +2,7 @@
 
 import Footer from "@/components/Footer/Footer"
 import Header from "@/components/Header/Header"
+import HomePage from "@/components/Home/Home"
 import Loading from "@/components/Loading/loading"
 import { doGetAccountAction } from "@/redux/account/accountSlice"
 import { callFetchAccount } from "@/services/api"
@@ -33,7 +34,7 @@ export default function Home() {
         || pathname === '/login'
         || pathname === '/register' ?
         <>
-          HomePage
+          <HomePage/>
         </> : <Loading />}
       <Footer />
 

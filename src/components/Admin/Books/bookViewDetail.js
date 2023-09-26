@@ -1,9 +1,10 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Badge, Descriptions, Divider, Drawer } from 'antd';
 import moment from 'moment';
 import { Modal, Upload } from 'antd';
+import { v4 as uuidv4 } from 'uuid';
 
 const getBase64 = (file) =>
     new Promise((resolve, reject) => {
@@ -19,32 +20,8 @@ const BookViewDetail = (props) => {
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
     const [previewTitle, setPreviewTitle] = useState('');
-    const [fileList, setFileList] = useState([
-        {
-            uid: '-1',
-            name: 'image.png',
-            status: 'done',
-            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-        },
-        {
-            uid: '-2',
-            name: 'image.png',
-            status: 'done',
-            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-        },
-        {
-            uid: '-3',
-            name: 'image.png',
-            status: 'done',
-            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-        },
-        {
-            uid: '-4',
-            name: 'image.png',
-            status: 'done',
-            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-        },
-    ]);
+    const [fileList, setFileList] = useState([]);
+
     const handleCancel = () => setPreviewOpen(false);
     const handlePreview = async (file) => {
         if (!file.url && !file.preview) {
@@ -66,6 +43,34 @@ const BookViewDetail = (props) => {
         setOpenViewDetail(false)
         setDataViewDetail(null)
     }
+
+    useEffect(() => {
+        if (dataViewDetail) {
+            let imgThumbnail = {};
+            let imgSlider = [];
+            if (dataViewDetail.thumbnail) {
+                imgThumbnail = {
+                    uid: uuidv4(),
+                    name: dataViewDetail.thumbnail,
+                    status: 'done',
+                    url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/images/book/${dataViewDetail.thumbnail}`
+                }
+            }
+            if (dataViewDetail.slider && dataViewDetail.slider.length > 0) {
+                dataViewDetail.slider.map((item) => {
+                    imgSlider.push({
+                        uid: uuidv4(),
+                        name: item,
+                        status: 'done',
+                        url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/images/book/${item}`
+                    })
+                })
+            }
+            // console.log(dataViewDetail)
+            setFileList([imgThumbnail, ...imgSlider])
+        }
+    }, [dataViewDetail])
+
     return (
         <>
             <Drawer
@@ -103,7 +108,7 @@ const BookViewDetail = (props) => {
                     onPreview={handlePreview}
                     onChange={handleChange}
                     showUploadList={
-                        {showRemoveIcon : false}
+                        { showRemoveIcon: false }
                     }
                 >
                 </Upload>

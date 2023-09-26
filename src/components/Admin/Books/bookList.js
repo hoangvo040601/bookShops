@@ -1,10 +1,13 @@
 'use client'
 import React, { useEffect, useState } from 'react';
 import { Table, Row, Col, Button, notification, Popconfirm, message } from 'antd';
-import { callBookList, callDeleteUser } from '@/services/api';
-import { DeleteOutlined, EditOutlined, ExportOutlined, ImportOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons';
+import { callBookList, callDeleteBook} from '@/services/api';
+import { DeleteOutlined, EditOutlined, ExportOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons';
+import * as XLSX from 'xlsx/xlsx.mjs';
 import BookSearch from './bookSearch';
 import BookViewDetail from './bookViewDetail';
+import ModalUploadBook from './modalUploadBook';
+import ModalUpdateBook from './modalUpdateBook';
 
 
 // https://stackblitz.com/run?file=demo.tsx
@@ -19,10 +22,10 @@ const BookList = () => {
     const [sortQuery, setSortQuery] = useState("sort =-updatedAt")
     const [dataViewDetail, setDataViewDetail] = useState(false)
     const [openViewDetail, setOpenViewDetail] = useState(false)
-    // const [showModalCreate, setShowModalCreate] = useState(false)
+    const [showModalCreate, setShowModalCreate] = useState(false)
     // const [showModalImport, setShowModalImport] = useState(false)
-    // const [showModalUpdate, setShowModalUpdate] = useState(false)
-    // const [dataUpdate, setDataUpdate] = useState(false)
+    const [showModalUpdate, setShowModalUpdate] = useState(false)
+    const [dataUpdate, setDataUpdate] = useState(false)
 
 
 
@@ -42,7 +45,6 @@ const BookList = () => {
             query += `&${sortQuery}`
         }
         const res = await callBookList(query)
-        console.log("check : ", res)
         if (res && res.data) {
             setlistBook(res.data.result)
             setTotal(res.data.meta.total)
@@ -50,19 +52,19 @@ const BookList = () => {
         setIsLoading(false)
     }
 
-    // const handleDeleteUser = async (userId) => {
-    //     const res = await callDeleteUser(userId)
-    //     if(res && res.data){
-    //         message.success("Xoá user thành công!")
-    //         fetchUser()
-    //     }else{
-    //         notification.error({
-    //             message: "có lỗi xảy ra",
-    //             description: res.message
-    //         })
-    //     }
+    const handleDeleteBook = async (bookId) => {
+        const res = await callDeleteBook(bookId)
+        if(res && res.data){
+            message.success("Xoá user thành công!")
+            fetchBook()
+        }else{
+            notification.error({
+                message: "có lỗi xảy ra",
+                description: res.message
+            })
+        }
 
-    // }
+    }
     const columns = [
         {
             title: 'Id',
@@ -109,9 +111,9 @@ const BookList = () => {
                         <Button onClick={() => { setShowModalUpdate(true), setDataUpdate(record) }}><EditOutlined /></Button>
                         <Popconfirm
                             placement="leftTop"
-                            title={"Xác nhận xoá User"}
-                            description="bạn có chắc chắn muốn xoá user này!"
-                            // onConfirm={() => handleDeleteUser(record._id)}
+                            title={"Xác nhận xoá Book"}
+                            description="bạn có chắc chắn muốn xoá Sách này!"
+                            onConfirm={() => handleDeleteBook(record._id)}
                             okText="Xác nhận"
                             cancelText="Huỷ"
                             trigger="click"
@@ -145,13 +147,13 @@ const BookList = () => {
         setFilter(query)
     }
 
-    const handleExportUser = () => {
+    const handleExportBook = () => {
         if (listBook.length > 0) {
 
             const worksheet = XLSX.utils.json_to_sheet(listBook);
             const workbook = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-            XLSX.writeFile(workbook, "ExportDataUser.xlsx");
+            XLSX.writeFile(workbook, "ExportDataBook.xlsx");
         }
     }
 
@@ -163,7 +165,7 @@ const BookList = () => {
                     <Button
                         icon={<ExportOutlined />}
                         type='primary'
-                        onClick={() => handleExportUser()}
+                        onClick={() => handleExportBook()}
                     >Export</Button>
                     {/* <Button
                         icon={<ImportOutlined />}
@@ -225,6 +227,20 @@ const BookList = () => {
                 setOpenViewDetail={setOpenViewDetail}
                 dataViewDetail={dataViewDetail}
                 setDataViewDetail={setDataViewDetail}
+            />
+            <ModalUploadBook
+                showModalCreate={showModalCreate}
+                setShowModalCreate={setShowModalCreate}
+                fetchBook={fetchBook}
+
+            />
+            <ModalUpdateBook
+                showModalUpdate={showModalUpdate}
+                setShowModalUpdate={setShowModalUpdate}
+                fetchBook={fetchBook}
+                dataUpdate={dataUpdate}
+                setDataUpdate={setDataUpdate}
+
             />
             {/* <ModalCreateUser
                 showModalCreate={showModalCreate}

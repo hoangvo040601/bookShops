@@ -106,7 +106,7 @@ const ModalImportUser = (props) => {
         <>
             <Modal
                 title="Import data user"
-                width={"50vh"}
+                width={"40vw"}
                 visible={showModalImport}
                 onOk={() => handleSubmit()}
                 onCancel={() => {
