@@ -17,7 +17,7 @@ export default function Home() {
   const isLoading = useSelector(state => state.account.isLoading)
   const getAccount = async () => {
     if (pathname === '/login'
-    || pathname === '/register'
+      || pathname === '/register'
     ) return;
     const res = await callFetchAccount()
     if (res && res.data) {
@@ -27,17 +27,20 @@ export default function Home() {
   useEffect(() => {
     getAccount();
   }, [])
+
+  
   return (
-    <>
+    <div style={{
+      backgroundColor: "#f5f5fa",
+    }}>
       <Header />
       {isLoading === false
         || pathname === '/login'
         || pathname === '/register' ?
         <>
-          <HomePage/>
+          <HomePage />
         </> : <Loading />}
-      <Footer />
 
-    </>
+    </div>
   )
 }

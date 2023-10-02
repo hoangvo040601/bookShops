@@ -1,15 +1,17 @@
 .header-container {
+    background-color: #fff;
     .page-header {
         display: flex;
         user-select: none;
         -moz-user-select: none;
         -webkit-user-select: none;
-        height: 55px;
+        height: 96px;
         color: #808089;
         width: 100%;
         max-width: 1440px;
         margin: 0 auto;
         line-height: 55px;
+        // justify-content: space-around
 
 
         &__top {
@@ -32,12 +34,14 @@
                 width: 100%;
                 align-items: center;
                 gap: 10px;
+                justify-content: space-between;
             }
         }
 
         .logo {
             color: #61dafb;
             cursor: pointer;
+            text-align: center;
             display: block;
 
             .icon-react {
@@ -95,6 +99,7 @@
         display: block;
         opacity: 1;
         height: auto;
+        align-self: center;
 
         &__item {
             opacity: 0.8;
@@ -133,6 +138,7 @@
 
             .page-header__bottom {
                 justify-content: center;
+                text-align: center;
                 flex-grow: 1;
             }
         }
@@ -141,7 +147,7 @@
             display: block;
             opacity: 1;
             height: auto;
-
+            align-self: center;
             &__item {
                 opacity: 0.8;
                 display: inline-block;

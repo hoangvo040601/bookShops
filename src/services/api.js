@@ -62,3 +62,7 @@ export const callUpdateBook =(_id,thumbnail, slider, mainText, author, price, so
 export const callDeleteBook =(_id)=>{
     return axios.delete(`/api/v1/book/${_id}`)
 }
+
+export const callBookViewDetail = (_id)=>{
+    return axios.get(`/api/v1/book/${_id}`)
+}

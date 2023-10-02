@@ -4,13 +4,15 @@ import React, { useState } from 'react';
 // import { VscSearchFuzzy } from 'react-icons/vsc';
 import { Divider, Badge, Drawer, message, Avatar } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { DownOutlined } from '@ant-design/icons';
+import { DownOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import { Dropdown, Space } from 'antd';
 import './header.scss';
 import { doLogoutAction } from '@/redux/account/accountSlice';
 import { callLogout } from '../../services/api';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import logoHome from '../../../public/logo.png'
+import Image from 'next/image';
 
 const Header = () => {
     const [openDrawer, setOpenDrawer] = useState(false);
@@ -60,8 +62,15 @@ const Header = () => {
                         }}>☰</div>
                         <div className='page-header__logo'>
                             <span className='logo'>
-                                <div className='rotate icon-react' /> Vo van Hoang
-                                <div className='icon-search' />
+                                <div className='icon-react'>
+                                    <Image
+                                        src={logoHome}
+                                        width={50}
+                                        height={50}
+                                        alt="Picture of the author"
+                                    />
+                                </div>
+
                             </span>
                             <input
                                 className="input-search" type={'text'}
@@ -70,14 +79,16 @@ const Header = () => {
                         </div>
 
                     </div>
-                    <nav className="page-header__bottom">
+                    <div className="page-header__bottom">
                         <ul id="navigation" className="navigation">
                             <li className="navigation__item">
                                 <Badge
                                     count={5}
                                     size={"small"}
                                 >
-                                    <div className='icon-cart' />
+                                    <div className='icon-cart' >
+                                        <ShoppingCartOutlined />
+                                    </div>
                                 </Badge>
                             </li>
                             <li className="navigation__item mobile"><Divider type='vertical' /></li>
@@ -88,7 +99,7 @@ const Header = () => {
                                     <Dropdown menu={{ items }} trigger={['click']}>
                                         <a onClick={(e) => e.preventDefault()}>
                                             <Space>
-                                                <Avatar src={urlAvatar}/>
+                                                <Avatar src={urlAvatar} />
                                                 {user?.fullName}
                                                 <DownOutlined />
                                             </Space>
@@ -97,9 +108,9 @@ const Header = () => {
                                 }
                             </li>
                         </ul>
-                    </nav>
+                    </div>
                 </header>
-            </div>
+            </div >
             <Drawer
                 title="Menu chức năng"
                 placement="left"

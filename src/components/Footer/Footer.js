@@ -4,7 +4,8 @@ const Footer = () => {
         <div
             style={{
                 textAlign: 'center',
-                paddingBottom: '28px',
+                paddingTop: "28px",
+                paddingBottom: "28px"
             }}>
             BookShop ©2023 Created by Vo Van Hoang
         </div>
