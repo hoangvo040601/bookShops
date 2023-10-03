@@ -1,5 +1,6 @@
 .header-container {
     background-color: #fff;
+
     .page-header {
         display: flex;
         user-select: none;
@@ -148,6 +149,7 @@
             opacity: 1;
             height: auto;
             align-self: center;
+
             &__item {
                 opacity: 0.8;
                 display: inline-block;
@@ -160,6 +162,49 @@
                 &.mobile {
                     display: none;
                 }
+            }
+        }
+    }
+}
+
+.popover-body {
+    width: 390px;
+    .book {
+        display: flex;
+        justify-content: space-between;
+        padding: 16px 0px;
+        margin: 0;
+        width: 100%;
+
+        &:hover{
+            cursor: pointer;
+            background-color: #cfcfcf;
+        }
+
+        .book-body {
+            display: flex;
+            justify-content: space-between;
+
+            .book-img {
+                width: 50px;
+                height: auto;
+                padding-right: 10px;
+            }
+        }
+        .book-price{
+            color: #f0451e;
+        }
+    }
+    .popover-footer{
+        display: flex;
+        justify-content: flex-end;
+        Button{
+            background-color: #f0451e;
+            color: #fff;
+            &:hover{
+                outline: none;
+                color: #fff;
+                border-color: none;
             }
         }
     }

@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 // import { FaReact } from 'react-icons/fa'
 // import { FiShoppingCart } from 'react-icons/fi';
 // import { VscSearchFuzzy } from 'react-icons/vsc';
-import { Divider, Badge, Drawer, message, Avatar } from 'antd';
+import { Divider, Badge, Drawer, message, Avatar, Popover, Button } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { DownOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import { Dropdown, Space } from 'antd';
@@ -18,8 +18,20 @@ const Header = () => {
     const [openDrawer, setOpenDrawer] = useState(false);
     const isAuthenticated = useSelector(state => state.account.isAuthenticated);
     const user = useSelector(state => state.account.user);
+    const orderNumber = useSelector(state => state.order.cart)
     const router = useRouter();
     const dispatch = useDispatch()
+
+
+    const [showArrow, setShowArrow] = useState(true);
+    const [arrowAtCenter, setArrowAtCenter] = useState(false);
+    const mergedArrow = useMemo(() => {
+        if (arrowAtCenter)
+            return {
+                pointAtCenter: true,
+            };
+        return showArrow;
+    }, [showArrow, arrowAtCenter]);
 
     const handleLogout = async () => {
         const res = await callLogout();
@@ -50,6 +62,30 @@ const Header = () => {
             key: 'admin',
         })
     }
+    const contentPopover = () => {
+        return (
+            <div className="popover-body">
+                <div className="popover-content">
+                    {orderNumber.map((book, index) => {
+                        return (
+                            <div className="book">
+                                <div className="book-body">
+                                    <img src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/images/book/${book?.detail?.thumbnail}`} className='book-img' />
+                                    <div className="book-title">{book?.detail?.mainText}</div>
+                                </div>
+                                <div className="book-price">{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(`${book?.detail?.price}`)}</div>
+                            </div>
+                        )
+                    })}
+                </div>
+                <div className='popover-footer'>
+                    <Button >Xem giỏ hàng</Button>
+                </div>
+            </div>
+        )
+    }
+
+
 
     const urlAvatar = `${process.env.NEXT_PUBLIC_BACKEND_URL}/images/avatar/${user?.avatar}`;
     return (
@@ -82,14 +118,22 @@ const Header = () => {
                     <div className="page-header__bottom">
                         <ul id="navigation" className="navigation">
                             <li className="navigation__item">
-                                <Badge
-                                    count={5}
-                                    size={"small"}
-                                >
-                                    <div className='icon-cart' >
-                                        <ShoppingCartOutlined />
-                                    </div>
-                                </Badge>
+                                <Popover
+                                    className='popover-cart'
+                                    rootClassName='popover-cart'
+                                    placement="bottomRight"
+                                    title={"Giỏ hàng"}
+                                    content={contentPopover}
+                                    arrow={mergedArrow}>
+                                    <Badge
+                                        count={orderNumber?.length ?? 0}
+                                        size={"small"}
+                                    >
+                                        <div className='icon-cart' >
+                                            <ShoppingCartOutlined />
+                                        </div>
+                                    </Badge>
+                                </Popover>
                             </li>
                             <li className="navigation__item mobile"><Divider type='vertical' /></li>
                             <li className="navigation__item mobile">
