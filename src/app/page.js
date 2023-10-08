@@ -34,12 +34,10 @@ export default function Home() {
       backgroundColor: "#f5f5fa",
     }}>
       <Header />
-      {isLoading === false
-        || pathname === '/login'
-        || pathname === '/register' ?
+      {
         <>
           <HomePage />
-        </> : <Loading />}
+        </>}
 
     </div>
   )

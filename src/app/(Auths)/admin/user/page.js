@@ -2,7 +2,7 @@
 import LayoutAdmin from "@/components/Admin";
 import TableUser from "@/components/Admin/TableUser/table";
 import useAccount from "@/hooks/useAccount";
-import RoleBaseRoute from "../../role";
+import RoleBaseRoute from "../../../roleAdmin";
 
 const ManageUser = () => {
     useAccount();

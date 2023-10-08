@@ -39,6 +39,7 @@ const Header = () => {
             dispatch(doLogoutAction());
             message.success('Đăng xuất thành công');
             router.push('/')
+
         }
     }
 
@@ -79,7 +80,9 @@ const Header = () => {
                     })}
                 </div>
                 <div className='popover-footer'>
-                    <Button >Xem giỏ hàng</Button>
+                    <Link href="/order">
+                        <Button >Xem giỏ hàng</Button>
+                    </Link>
                 </div>
             </div>
         )
@@ -98,14 +101,16 @@ const Header = () => {
                         }}>☰</div>
                         <div className='page-header__logo'>
                             <span className='logo'>
-                                <div className='icon-react'>
-                                    <Image
-                                        src={logoHome}
-                                        width={50}
-                                        height={50}
-                                        alt="Picture of the author"
-                                    />
-                                </div>
+                                <Link href="/">
+                                    <div className='icon-react'>
+                                        <Image
+                                            src={logoHome}
+                                            width={50}
+                                            height={50}
+                                            alt="Picture of the author"
+                                        />
+                                    </div>
+                                </Link>
 
                             </span>
                             <input
@@ -126,7 +131,7 @@ const Header = () => {
                                     content={contentPopover}
                                     arrow={mergedArrow}>
                                     <Badge
-                                        count={orderNumber?.length ?? 0}
+                                        count={isAuthenticated === true ? orderNumber?.length : 0}
                                         size={"small"}
                                     >
                                         <div className='icon-cart' >
@@ -163,8 +168,9 @@ const Header = () => {
             >
                 <p>Quản lý tài khoản</p>
                 <Divider />
-
-                <p>Đăng xuất</p>
+                <label
+                    onClick={() => handleLogout()}
+                >Đăng xuất</label>
                 <Divider />
             </Drawer>
         </>

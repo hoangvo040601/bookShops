@@ -1,82 +1,173 @@
 'use client'
 
-import { Col, Divider, InputNumber, Row } from 'antd';
+import { Col, Divider, Empty, InputNumber, Row, Steps } from 'antd';
 import './order.scss';
 import { DeleteOutlined } from '@ant-design/icons';
 import Header from '@/components/Header/Header';
 import Footer from '@/components/Footer/Footer';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { doDeleteBookCart, doUpdateQuantityBookAction } from '@/redux/order/orderSlice';
+import Payment from '@/components/Order/payment';
+import CompletePay from '@/components/Order/completePayment';
+import RoleBaseRoute from '../roleAdmin';
 
 const ViewOrder = (props) => {
+    const dispatch = useDispatch();
+    const [totalPrice, setTotalPrice] = useState(0)
+    const [curentStep, setCurentStep] = useState(0)
+    const carts = useSelector(state => state.order.cart)
+
+    useEffect(() => {
+        if (carts && carts.length > 0) {
+            let sum = 0;
+            carts.map(item => { sum += item.quantity * item.detail.price })
+            setTotalPrice(sum);
+        }
+        else { setTotalPrice(0) }
+    }, [carts])
+
+    const handleOnChangeInput = (value, item) => {
+        if (!value || value < 1) return;
+        if (!isNaN(value)) {
+            dispatch(doUpdateQuantityBookAction({ quantity: value, detail: item, _id: item._id }))
+        }
+    }
+
+    const handleDeleteBookCart = (_id) => {
+        if (!_id) return;
+        if (_id) {
+            dispatch(doDeleteBookCart({ _id: _id }))
+
+        }
+    }
     return (
-        <>
+        <RoleBaseRoute>
+            <>
+                <Header />
+                <div style={{ background: '#efefef', padding: "20px 0" }}>
+                    <div className="order-container" style={{ maxWidth: 1440, margin: '0 auto' }}>
+                        <Steps
+                            size="small"
+                            current={curentStep}
+                            items={[
+                                {
+                                    title: 'Đơn hàng',
+                                },
+                                {
+                                    title: 'Đặt hàng',
+                                },
+                                {
+                                    title: 'Thanh toán',
+                                },
+                            ]}
+                        />
+                        <br />
+                        {
+                            curentStep === 2 &&
+                            <CompletePay />
+                        }
+                        <Row gutter={[20, 20]}>
+                            {
+                                curentStep === 1 &&
+                                <>
+                                    <Col md={18} xs={24}>
+                                        {
+                                            carts.length !== 0 ?
+                                                carts.map((item, index) => {
+                                                    const priceBook = item?.detail?.price;
+                                                    return (
+                                                        <div className='order-book'>
+                                                            <div className='book-content'>
+                                                                <img src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/images/book/${item?.detail?.thumbnail}`} />
+                                                                <div className='title'>
+                                                                    {item?.detail?.mainText}
+                                                                </div>
+                                                                <div className='price'>
+                                                                    {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(priceBook)}
+                                                                </div>
+                                                            </div>
+                                                            <div className='action'>
+                                                                <div className='quantity'>
+                                                                    <InputNumber onChange={(value) => handleOnChangeInput(value, item)} value={item.quantity} />
+                                                                </div>
+                                                                <div className='sum'>
+                                                                    Tổng: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(`${priceBook * item.quantity}`)}
+                                                                </div>
+                                                                <DeleteOutlined onClick={() => handleDeleteBookCart(item?.detail?._id)} />
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                }) : <Empty description={<div> Không có sản phẩm nào trong giỏ hàng!</div>} />
+                                        }
+                                    </Col>
+                                    <Col md={6} xs={24} >
+                                        <Payment
+                                            totalPrice={totalPrice}
+                                            carts={carts}
+                                            setCurentStep={setCurentStep}
+                                        />
+                                    </Col>
 
-            <Header />
-            <div style={{ background: '#efefef', padding: "20px 0" }}>
-                <div className="order-container" style={{ maxWidth: 1440, margin: '0 auto' }}>
-                    <Row gutter={[20, 20]}>
-                        <Col md={18} xs={24}>
-                            <div className='order-book'>
-                                <div className='book-content'>
-                                    <img src="https://picsum.photos/id/1015/250/150/" />
-                                    <div className='title'>
-                                        How The Body Works - Hiểu Hết Về Cơ Thể
-                                    </div>
-                                    <div className='price'>
-                                        256.500 ₫
-                                    </div>
-                                </div>
-                                <div className='action'>
-                                    <div className='quantity'>
-                                        <InputNumber value={2} />
-                                    </div>
-                                    <div className='sum'>
-                                        Tổng: 513.000 ₫
-                                    </div>
-                                    <DeleteOutlined />
-                                </div>
-                            </div>
+                                </>
+                            }
+                            {
+                                curentStep === 0 &&
+                                <>
+                                    <Col md={18} xs={24}>
+                                        {
+                                            carts.length !== 0 ?
+                                                carts.map((item, index) => {
+                                                    const priceBook = item?.detail?.price;
+                                                    return (
+                                                        <div className='order-book'>
+                                                            <div className='book-content'>
+                                                                <img src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/images/book/${item?.detail?.thumbnail}`} />
+                                                                <div className='title'>
+                                                                    {item?.detail?.mainText}
+                                                                </div>
+                                                                <div className='price'>
+                                                                    {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(priceBook)}
+                                                                </div>
+                                                            </div>
+                                                            <div className='action'>
+                                                                <div className='quantity'>
+                                                                    <InputNumber onChange={(value) => handleOnChangeInput(value, item)} value={item.quantity} />
+                                                                </div>
+                                                                <div className='sum'>
+                                                                    Tổng: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(`${priceBook * item.quantity}`)}
+                                                                </div>
+                                                                <DeleteOutlined onClick={() => handleDeleteBookCart(item?.detail?._id)} />
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                }) : <Empty description={<div> Không có sản phẩm nào trong giỏ hàng!</div>} />
+                                        }
+                                    </Col>
+                                    <Col md={6} xs={24} >
+                                        <div className='order-sum'>
+                                            <div className='calculate'>
+                                                <span>  Tạm tính</span>
+                                                <span> {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalPrice || 0)}</span>
+                                            </div>
+                                            <Divider style={{ margin: "10px 0" }} />
+                                            <div className='calculate'>
+                                                <span> Tổng tiền</span>
+                                                <span className='sum-final'> {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalPrice || 0)}</span>
+                                            </div>
+                                            <Divider style={{ margin: "10px 0" }} />
+                                            <button onClick={() => setCurentStep(1)} >Mua Hàng ({carts?.length ?? 0})</button>
+                                        </div>
+                                    </Col>
 
-                            <div className='order-book'>
-                                <div className='book-content'>
-                                    <img src="https://picsum.photos/id/1015/250/150/" />
-                                    <div className='title'>
-                                        How The Body Works - Hiểu Hết Về Cơ Thể
-                                    </div>
-                                    <div className='price'>
-                                        256.500 ₫
-                                    </div>
-                                </div>
-                                <div className='action'>
-                                    <div className='quantity'>
-                                        <InputNumber value={2} />
-                                    </div>
-                                    <div className='sum'>
-                                        Tổng: 513.000 ₫
-                                    </div>
-                                    <DeleteOutlined />
-                                </div>
-                            </div>
-                        </Col>
-                        <Col md={6} xs={24} >
-                            <div className='order-sum'>
-                                <div className='calculate'>
-                                    <span>  Tạm tính</span>
-                                    <span> 1.055.400đ</span>
-                                </div>
-                                <Divider style={{ margin: "10px 0" }} />
-                                <div className='calculate'>
-                                    <span> Tổng tiền</span>
-                                    <span className='sum-final'>  1.055.400 ₫</span>
-                                </div>
-                                <Divider style={{ margin: "10px 0" }} />
-                                <button>Mua Hàng (2)</button>
-                            </div>
-                        </Col>
-                    </Row>
+                                </>
+                            }
+                        </Row>
+                    </div>
                 </div>
-            </div>
-            <Footer />
-        </>
+                <Footer />
+            </>
+        </RoleBaseRoute>
     )
 }
 

@@ -3,7 +3,7 @@
 import LayoutAdmin from "@/components/Admin";
 import BookList from "@/components/Admin/Books/bookList";
 import useAccount from "@/hooks/useAccount";
-import RoleBaseRoute from "../../role";
+import RoleBaseRoute from "../../../roleAdmin";
 
 const ManageBook = () => {
     useAccount();

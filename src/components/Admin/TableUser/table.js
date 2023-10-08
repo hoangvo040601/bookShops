@@ -33,7 +33,7 @@ const TableUser = () => {
     useEffect(() => {
         fetchUser();
     }, [current, pageSize, filter, sortQuery])
-
+    console.log(listUser)
     const fetchUser = async () => {
         setIsLoading(true);
         let query = `current=${current}&pageSize=${pageSize}`;

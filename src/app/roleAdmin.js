@@ -1,6 +1,7 @@
 'use client'
 import { usePathname } from "next/navigation";
 import { useSelector } from "react-redux";
+import NotRoute from "./not-route";
 
 const RoleBaseRoute = ({ children }) => {
     const pathname = usePathname();
@@ -8,10 +9,10 @@ const RoleBaseRoute = ({ children }) => {
     const user = useSelector(state => state.account.user)
     const userRole = user.role;
 
-    if (isAdminRole && userRole === "ADMIN") {
+    if (isAdminRole && userRole === "ADMIN" || !isAdminRole && (userRole === "USER" || userRole === "ADMIN")) {
         return (<>{children}</>)
     } else {
-        return (<div> Not role </div>)
+        return (<div><NotRoute/></div>)
     }
 }
 export default RoleBaseRoute;

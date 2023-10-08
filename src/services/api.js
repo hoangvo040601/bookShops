@@ -66,3 +66,15 @@ export const callDeleteBook =(_id)=>{
 export const callBookViewDetail = (_id)=>{
     return axios.get(`/api/v1/book/${_id}`)
 }
+
+export const callOrderBook =(data)=>{
+    return axios.post('/api/v1/order',{...data})
+}
+
+export const callHistoryOrder =()=>{
+    return axios.get('/api/v1/history')
+}
+
+export const callFetchDashboard =()=>{
+    return axios.get('/api/v1/database/dashboard')
+}
