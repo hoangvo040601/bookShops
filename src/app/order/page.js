@@ -123,18 +123,18 @@ const ViewOrder = (props) => {
                                                         <div className='order-book'>
                                                             <div className='book-content'>
                                                                 <img src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/images/book/${item?.detail?.thumbnail}`} />
-                                                                <div className='title'>
+                                                                <div className='title' key={item.index}>
                                                                     {item?.detail?.mainText}
                                                                 </div>
-                                                                <div className='price'>
+                                                                <div className='price' key={item.index}>
                                                                     {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(priceBook)}
                                                                 </div>
                                                             </div>
                                                             <div className='action'>
-                                                                <div className='quantity'>
+                                                                <div className='quantity' key={item.index}>
                                                                     <InputNumber onChange={(value) => handleOnChangeInput(value, item)} value={item.quantity} />
                                                                 </div>
-                                                                <div className='sum'>
+                                                                <div className='sum' key={item.index}>
                                                                     Tổng: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(`${priceBook * item.quantity}`)}
                                                                 </div>
                                                                 <DeleteOutlined onClick={() => handleDeleteBookCart(item?.detail?._id)} />

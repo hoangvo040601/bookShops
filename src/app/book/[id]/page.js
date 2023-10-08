@@ -42,11 +42,10 @@ const BookPage = ({ params: id }) => {
     const fetchBook = async (id) => {
         const res = await callBookViewDetail(id)
         if (res && res.data) {
-            let raw = res.data;
+            let raw = res.data
             // console.log(raw)
-            raw.items = getImages(raw);
+            raw.items = getImages(raw)
             setDataBook(raw)
-
         }
     }
     const getImages = (raw) => {

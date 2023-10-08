@@ -27,8 +27,6 @@ export default function Home() {
   useEffect(() => {
     getAccount();
   }, [])
-
-  
   return (
     <div style={{
       backgroundColor: "#f5f5fa",

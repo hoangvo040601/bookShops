@@ -45,11 +45,6 @@ const HomePage = () => {
             setFilter(f)
         }
     }
-
-    // const onChange = (key) => {
-    //     console.log(key);
-    // };
-
     useEffect(() => {
         const fetchCatlegory = async () => {
             const res = await callFetchCategory();
@@ -232,13 +227,13 @@ const HomePage = () => {
                                     listBook.map(item => {
                                         return (
 
-                                            <Link className="column" href={`/book/` + item?._id} keys={item?._id}>
+                                            <Link className="column" href={`/book/` + item?._id} key={item?._id}>
                                                 <div className='wrapper'>
-                                                    <div className='thumbnail'>
+                                                    <div className='thumbnail' >
                                                         <img src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/images/book/${item.thumbnail}`} alt="thumbnail book" />
                                                     </div>
-                                                    <div className='text'>{item.mainText}</div>
-                                                    <div className='price'>
+                                                    <div className='text' >{item.mainText}</div>
+                                                    <div className='price' >
                                                         {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(`${item.price}`)}
                                                     </div>
                                                     <div className='rating'>

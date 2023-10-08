@@ -69,7 +69,7 @@ const Header = () => {
                 <div className="popover-content">
                     {orderNumber.map((book, index) => {
                         return (
-                            <div className="book">
+                            <div className="book" key={book.index}>
                                 <div className="book-body">
                                     <img src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/images/book/${book?.detail?.thumbnail}`} className='book-img' />
                                     <div className="book-title">{book?.detail?.mainText}</div>
