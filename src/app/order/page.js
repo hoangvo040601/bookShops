@@ -120,21 +120,21 @@ const ViewOrder = (props) => {
                                                 carts.map((item, index) => {
                                                     const priceBook = item?.detail?.price;
                                                     return (
-                                                        <div className='order-book'>
+                                                        <div className='order-book'  key={index}>
                                                             <div className='book-content'>
                                                                 <img src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/images/book/${item?.detail?.thumbnail}`} />
-                                                                <div className='title' key={item.index}>
+                                                                <div className='title'>
                                                                     {item?.detail?.mainText}
                                                                 </div>
-                                                                <div className='price' key={item.index}>
+                                                                <div className='price' >
                                                                     {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(priceBook)}
                                                                 </div>
                                                             </div>
                                                             <div className='action'>
-                                                                <div className='quantity' key={item.index}>
+                                                                <div className='quantity'>
                                                                     <InputNumber onChange={(value) => handleOnChangeInput(value, item)} value={item.quantity} />
                                                                 </div>
-                                                                <div className='sum' key={item.index}>
+                                                                <div className='sum' >
                                                                     Tổng: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(`${priceBook * item.quantity}`)}
                                                                 </div>
                                                                 <DeleteOutlined onClick={() => handleDeleteBookCart(item?.detail?._id)} />
