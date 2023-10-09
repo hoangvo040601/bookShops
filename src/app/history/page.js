@@ -5,7 +5,7 @@ import Header from "@/components/Header/Header";
 import { callHistoryOrder } from "@/services/api";
 import { Col, Row, Table, Tag } from "antd";
 import { useEffect, useState } from "react";
-import ReactJson from 'react-json-view'
+// import ReactJson from 'react-json-view'
 import RoleBaseRoute from "../roleAdmin";
 
 const History = () => {
@@ -41,14 +41,14 @@ const History = () => {
                 )
             }
         },
-        {
-            title: 'Chi tiết',
-            render: (text, record, index) => {
-                return (
-                    <span><ReactJson src={record} /></span>
-                )
-            }
-        },
+        // {
+        //     title: 'Chi tiết',
+        //     render: (text, record, index) => {
+        //         return (
+        //             <span><ReactJson src={record} /></span>
+        //         )
+        //     }
+        // },
 
     ];
     useEffect(() => {
