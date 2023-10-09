@@ -77,24 +77,24 @@ const ViewOrder = (props) => {
                                                 carts.map((item, index) => {
                                                     const priceBook = item?.detail?.price;
                                                     return (
-                                                        <div className='order-book'>
-                                                            <div className='book-content'>
-                                                                <img src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/images/book/${item?.detail?.thumbnail}`} />
-                                                                <div className='title'>
+                                                        <div className='order-book' key={index}>
+                                                            <div className='book-content' key={index}>
+                                                                <img src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/images/book/${item?.detail?.thumbnail}`} key={index}/>
+                                                                <div className='title' key={index}>
                                                                     {item?.detail?.mainText}
                                                                 </div>
-                                                                <div className='price'>
+                                                                <div className='price' key={index}>
                                                                     {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(priceBook)}
                                                                 </div>
                                                             </div>
-                                                            <div className='action'>
-                                                                <div className='quantity'>
+                                                            <div className='action' key={index}>
+                                                                <div className='quantity' key={index}>
                                                                     <InputNumber onChange={(value) => handleOnChangeInput(value, item)} value={item.quantity} />
                                                                 </div>
-                                                                <div className='sum'>
+                                                                <div className='sum' key={index}>
                                                                     Tổng: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(`${priceBook * item.quantity}`)}
                                                                 </div>
-                                                                <DeleteOutlined onClick={() => handleDeleteBookCart(item?.detail?._id)} />
+                                                                <DeleteOutlined onClick={() => handleDeleteBookCart(item?.detail?._id)} key={index} />
                                                             </div>
                                                         </div>
                                                     )
@@ -122,22 +122,22 @@ const ViewOrder = (props) => {
                                                     return (
                                                         <div className='order-book'  key={index}>
                                                             <div className='book-content'>
-                                                                <img src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/images/book/${item?.detail?.thumbnail}`} />
-                                                                <div className='title'>
+                                                                <img src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/images/book/${item?.detail?.thumbnail}`} key={index}/>
+                                                                <div className='title' key={index}>
                                                                     {item?.detail?.mainText}
                                                                 </div>
-                                                                <div className='price' >
+                                                                <div className='price' key={index} >
                                                                     {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(priceBook)}
                                                                 </div>
                                                             </div>
-                                                            <div className='action'>
-                                                                <div className='quantity'>
-                                                                    <InputNumber onChange={(value) => handleOnChangeInput(value, item)} value={item.quantity} />
+                                                            <div className='action' key={index}>
+                                                                <div className='quantity' key={index}>
+                                                                    <InputNumber onChange={(value) => handleOnChangeInput(value, item)} value={item.quantity}  key={index}/>
                                                                 </div>
-                                                                <div className='sum' >
+                                                                <div className='sum' key={index}>
                                                                     Tổng: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(`${priceBook * item.quantity}`)}
                                                                 </div>
-                                                                <DeleteOutlined onClick={() => handleDeleteBookCart(item?.detail?._id)} />
+                                                                <DeleteOutlined onClick={() => handleDeleteBookCart(item?.detail?._id)} key={index} />
                                                             </div>
                                                         </div>
                                                     )

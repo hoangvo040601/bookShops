@@ -143,10 +143,10 @@ const HomePage = () => {
                                 <Checkbox.Group>
                                     <Row>
                                         {
-                                            listCategory.map(item => {
+                                            listCategory.map((item,index) => {
                                                 return (
                                                     <Col span={24}>
-                                                        <Checkbox value={item.value} >
+                                                        <Checkbox value={item.value} key={index} >
                                                             {item.label}
                                                         </Checkbox>
                                                     </Col>
@@ -224,7 +224,7 @@ const HomePage = () => {
 
                             <Row className='customize-row'>
                                 {
-                                    listBook.map(item => {
+                                    listBook.map((item, index) => {
                                         return (
 
                                             <Link className="column" href={`/book/` + item?._id} key={item?._id}>

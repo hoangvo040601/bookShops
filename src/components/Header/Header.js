@@ -1,7 +1,4 @@
 import React, { useMemo, useState } from 'react';
-// import { FaReact } from 'react-icons/fa'
-// import { FiShoppingCart } from 'react-icons/fi';
-// import { VscSearchFuzzy } from 'react-icons/vsc';
 import { Divider, Badge, Drawer, message, Avatar, Popover, Button } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { DownOutlined, ShoppingCartOutlined } from '@ant-design/icons';
@@ -70,11 +67,11 @@ const Header = () => {
                     {orderNumber.map((book, index) => {
                         return (
                             <div className="book" key={index}>
-                                <div className="book-body">
-                                    <img src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/images/book/${book?.detail?.thumbnail}`} className='book-img' />
-                                    <div className="book-title">{book?.detail?.mainText}</div>
+                                <div className="book-body" key={index}>
+                                    <img src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/images/book/${book?.detail?.thumbnail}`} className='book-img' key={index} />
+                                    <div className="book-title" key={index}>{book?.detail?.mainText}</div>
                                 </div>
-                                <div className="book-price">{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(`${book?.detail?.price}`)}</div>
+                                <div className="book-price" key={index}>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(`${book?.detail?.price}`)}</div>
                             </div>
                         )
                     })}
