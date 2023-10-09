@@ -3,7 +3,6 @@ import { Divider, Modal, Table, Upload, message, notification } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import * as XLSX from 'xlsx/xlsx.mjs';
 import { callCreateListUser } from '@/services/api';
-import dataExcelExample from "./dataExcelExample.xlsx"
 
 
 const { Dragger } = Upload;
@@ -128,7 +127,7 @@ const ModalImportUser = (props) => {
                         Support for a single or bulk upload. Strictly prohibited from uploading company data or other
                         banned files.
                         {/* don't fix bug download */}
-                        &nbsp; <a onClick={e => e.stopPropagation()} href={dataExcelExample} download>Download Sample file</a>
+                        &nbsp; <a onClick={e => e.stopPropagation()} download>Download Sample file</a>
                     </p>
                 </Dragger>
                 <Divider />
