@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Table, Row, Col, Button, notification, Popconfirm, message } from 'antd';
 import { callBookList, callDeleteBook} from '@/services/api';
 import { DeleteOutlined, EditOutlined, ExportOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons';
-import * as XLSX from 'xlsx/xlsx.mjs';
+import * as XLSX from 'xlsx';
 import BookSearch from './bookSearch';
 import BookViewDetail from './bookViewDetail';
 import ModalUploadBook from './modalUploadBook';
